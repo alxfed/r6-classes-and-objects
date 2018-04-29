@@ -82,15 +82,22 @@ In order to be able to chain methods like ...$add(1)$add(3)... you need to retur
 $initialize() overrides the default behaviour of $new(). $initialize() is a good place to check that the variables passed to the object are the correct types, because nobody else will check that.
 
 ```{r}
-Person <- R6Class(classname = "Person", public = list(
-  name = NULL,
-  age = NA,
-  initialize = function(name, age = NA) {
-    stopifnot(is.character(name), length(name) == 1)
-    stopifnot(is.numeric(age), length(age) == 1)
+Person <- R6Class(classname = "Person", 
+  public = list(
+    name = NULL,
+    age = NA,
+    initialize = function(name, age = NA) {
+      stopifnot(is.character(name), length(name) == 1)
+      stopifnot(is.numeric(age), length(age) == 1)
     
-    self$name <- name
-    self$age <- age
+      self$name <- name
+      self$age <- age
+  },
+  print = function(...) {
+    cat("Person: \n")
+    cat("  Name: ", self$name, "\n", sep = "")
+    cat("  Age:  ", self$age, "\n", sep = "")
+    invisible(self)
   }
 ))
 
