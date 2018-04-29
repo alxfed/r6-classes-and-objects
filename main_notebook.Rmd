@@ -15,6 +15,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 --R6 objects are mutable: the usual copy-on-modify semantics do not apply.
 
+## R6 class definition
+
 The definition of a class is below. The name of the class (on the right) _must_ be assigned into a variable (on the left) with the same name, this creates an R6 object and defines a class . Naming convention: R6 classes use UpperCamelCase, methods and fields use snake_case. 
 
 ```{r}
@@ -61,6 +63,42 @@ The first argument is the class name the other two arguments (public and private
 "In methods, you can access elements in the public list using the variable self, and you can access attributes in the private list using the variable private."
 
 There is also an optional list 'active' for active bindings and an 'inherit' generator (see below).
+
+## The construction of an R6 class object
+
+You construct a new object from the class by calling the new() method. Methods belong to R6 objects so you use $ (because it's a list) to access new():
+
+```{r}
+x <- Accumulator$new()   # constructor
+
+# to invoke methods 
+x$add(4) 
+x$sum
+```
+In order to be able to chain methods like ...$add(1)$add(3)... you need to return self invisibly.
+
+## Initialize method
+
+$initialize() overrides the default behaviour of $new(). $initialize() is a good place to check that the variables passed to the object are the correct types, because nobody else will check that.
+
+```{r}
+Person <- R6Class(classname = "Person", public = list(
+  name = NULL,
+  age = NA,
+  initialize = function(name, age = NA) {
+    stopifnot(is.character(name), length(name) == 1)
+    stopifnot(is.numeric(age), length(age) == 1)
+    
+    self$name <- name
+    self$age <- age
+  }
+))
+
+alex <- Person$new("Alex", age = 62)
+print(alex)
+```
+
+
 
 ## R Markdown message
 
