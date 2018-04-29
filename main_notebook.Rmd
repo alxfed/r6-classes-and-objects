@@ -55,7 +55,7 @@ VectorStack <- R6Class("VectorStack",
                        ))
 ```
 
-So, what Wickham didn't say is that private and public should be there as in the example above.
+So, what Wickham didn't say is that the basic model is with private and public there as in the example above.
 
 The first argument is the class name the other two arguments (public and private) are lists of methods and attributes. The main rule, demonstrated above is:
 "In methods, you can access elements in the public list using the variable self, and you can access attributes in the private list using the variable private."
