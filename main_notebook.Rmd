@@ -35,7 +35,7 @@ This was an example from Wickham, here's an example from Mailund:
 library(R6)
 
 VectorStack <- R6Class("VectorStack",
-                       private = list(elements = Null),
+                       private = list(elements = NULL),
                        public = list(
                          top = function() {
                            private$elements[1]
