@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 --R6 objects are mutable: the usual copy-on-modify semantics do not apply.
 
-The definition of a class is below. The name of the class _must_ coinside on the left and on the right. Naming convention: R6 classes use UpperCamelCase, methods and fields use snake_case. 
+The definition of a class is below. The name of the class (on the right) _must_ be assigned into a variable (on the left) with the same name, this creates an R6 object and defines a class . Naming convention: R6 classes use UpperCamelCase, methods and fields use snake_case. 
 
 ```{r}
 library(R6)
@@ -55,10 +55,12 @@ VectorStack <- R6Class("VectorStack",
                        ))
 ```
 
-So, what Wickham doesn't say is that private and public should be there as above.
+So, what Wickham didn't say is that private and public should be there as in the example above.
 
+The first argument is the class name the other two arguments (public and private) are lists of methods and attributes. The main rule, demonstrated above is:
+"In methods, you can access elements in the public list using the variable self, and you can access attributes in the private list using the variable private."
 
-
+There is also an optional list 'active' for active bindings and an 'inherit' generator (see below).
 
 ## R Markdown message
 
