@@ -77,7 +77,7 @@ x$sum
 ```
 In order to be able to chain methods like ...$add(1)$add(3)... you need to return self invisibly.
 
-## Initialize method
+## Initialize and print methods
 
 $initialize() overrides the default behaviour of $new(). $initialize() is a good place to check that the variables passed to the object are the correct types, because nobody else will check that.
 
@@ -105,9 +105,51 @@ alex <- Person$new("Alex", age = 62)
 print(alex)
 ```
 
+## Inheritance
 
+Just add the class as a value of inherit variable, then use 'super' to reference its methods.
 
-## R Markdown message
+```{r}
+AccumulatorChatty <- R6Class("AccumulatorChatty", 
+  inherit = Accumulator,
+  public = list(
+    add = function(x = 1) {
+      cat("Adding ", x, "\n", sep = "")
+      super$add(x = x)
+    }
+  )
+)
+
+x2 <- AccumulatorChatty$new()
+x2$add(10)$add(1)$sum
+```
+
+## Active fields
+
+they look like fields but are results of hidden methods
+
+```{r}
+Rando <- R6::R6Class("Rando", active = list(
+  random = function(value) {
+    runif(1)       # uniform distribution from stats
+  }
+))
+x <- Rando$new()
+x$random
+x$random
+```
+
+## Assignment and cloning
+
+When R6 object is assigned no copy is created. If you want a separate object you need to $clone() it.
+
+Note that $clone() does not recursively clone nested R6 objects. If you want that, you’ll need to use $clone(deep = TRUE). Note that this only clones R6 objects: if you have other fields with reference semantics (e.g. environments) you’ll need to define your own $clone().
+
+## Finalizer
+
+The $finalize() method is invoked on deletion or by the gc.
+
+### R Markdown message
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
