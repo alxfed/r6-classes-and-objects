@@ -15,9 +15,50 @@ knitr::opts_chunk$set(echo = TRUE)
 
 --R6 objects are mutable: the usual copy-on-modify semantics do not apply.
 
+The definition of a class is below. The name of the class _must_ coinside on the left and on the right. Naming convention: R6 classes use UpperCamelCase, methods and fields use snake_case. 
+
 ```{r}
 library(R6)
+
+Accumulator <- R6Class("Accumulator", list(
+  sum = 0,
+  add = function(x = 1) {
+    self$sum <- self$sum + x 
+    invisible(self)
+  })
+)
 ```
+
+This was an example from Wickham, here's an example from Mailund:
+
+```{r}
+library(R6)
+
+VectorStack <- R6Class("VectorStack",
+                       private = list(elements = Null),
+                       public = list(
+                         top = function() {
+                           private$elements[1]
+                         },
+                         pop = function() {
+                           private$elements[-1]
+                           invisible(self)
+                         },
+                         push = function(e) {
+                           private$elements <-
+                             c(e, private$elements)
+                           invisible(self)
+                         },
+                         is_empty = function() {
+                           length(private$elements) == 0
+                         }
+                       ))
+```
+
+So, what Wickham doesn't say is that private and public should be there as above.
+
+
+
 
 ## R Markdown message
 
