@@ -1,0 +1,72 @@
+---
+title: "monetdb"
+author: "alxfed"
+date: "April 29, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## MonetDB with R (through MonetDBLite)
+MonetDB is columnar and the reads are much faster (but the writes are slower)
+https://datascienceplus.com/using-r-with-monetdb/
+
+Installation of the package
+
+```{r}
+install.packages('MonetDBLite', dependencies = TRUE)
+```
+
+Loading of the package.
+
+```{r}
+## Loading packages
+library(MonetDBLite)
+library(DBI)
+
+## Set directory to the database
+dbdir <- '/media/alxfed/toca/monetdb/'
+
+## Creating a conection to the database
+con <- dbConnect( MonetDBLite::MonetDBLite() , dbdir )
+
+## Dumping the csv file to the database
+monetdb.read.csv(conn = con, files = 'something.csv', tablename = 'table_ofsomething', header = TRUE, na.strings = '', delim = ',')
+
+## Listing tables
+dbListTables(con)
+
+## Couting rows in the table
+dbGetQuery(con, 'SELECT count(*) FROM table_ofsomething')
+
+## Quering the firts 100 rows
+teste <- dbGetQuery(con, "SELECT * FROM table_ofsomething LIMIT 100")
+
+```
+
+I don't understand this but
+
+```{bash}
+iconv -f ISO-8859-1 -t UTF-8 MICRODADOS_ENEM_2014.csv > microdados_enem2014.csv
+```
+
+and dplyr
+
+```{r}
+## Loading packages
+library(dplyr)
+
+## Connection to the database
+my_db <- MonetDBLite::src_monetdb(embedded=dbdir)
+my_tbl <- tbl(my_db, "table_ofsomething")
+
+## from here - in dplyr
+```
+
+## R Markdown message
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. 
